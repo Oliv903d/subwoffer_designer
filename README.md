@@ -46,6 +46,22 @@ The box geometry has real cutouts, so the STL export matches.
 The acoustic formulas are standard approximations; check important builds with a dedicated
 simulator (e.g. WinISD) and the manufacturer's recommendations.
 
+### Cut Blueprint
+
+In the **Subwoofer** tab, click **Cut Blueprint** for the selected box (or the first box
+if none is selected). The printable view shows the project/design name, material thickness,
+current units, and labelled diagrams with dimensions and quantities for each panel.
+Slot-port shelves and folded walls, or round-port tube sizes, are included when present.
+Use **Print** to print only the blueprint, or **Download PDF** for an A4 PDF with the same
+cut sizes and notes. PDF export uses the client-side `jspdf` dependency, loaded only when
+downloading, for vector diagrams and legible, paginated text without a server.
+
+Sizes follow the existing cut list: sides are full size; the other panels fit between them.
+Dimensions use the app's mm/cm/in formatting. Sloped sides show their top depth and angle;
+check bevels before cutting. Diagrams are not full-size templates, and no kerf allowance is
+added. Invalid dimensions or a slot port that cannot fit show an explanation instead of
+an export. Confirm cutout placement and fit in the designer before building.
+
 ### CAD
 - **Viewport**: grid, colored X/Y/Z axes, view cube, Home/Fit/Front/Top/Right views,
   perspective/orthographic toggle, shadows, selection and hover highlighting.
