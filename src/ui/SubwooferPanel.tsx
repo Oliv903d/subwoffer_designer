@@ -1,5 +1,5 @@
-import { useState, type ReactNode } from 'react';
-import { AlertTriangle, Check, Crosshair, Lock, LockOpen, Speaker, WandSparkles, X } from 'lucide-react';
+import { useCallback, useState, type ReactNode } from 'react';
+import { AlertTriangle, Check, Crosshair, Lock, LockOpen, Ruler, Speaker, WandSparkles, X } from 'lucide-react';
 import { useCad, useSelectedObject } from '../store/cadStore';
 import type { BoxFace, DriverMount, EnclosureDim, EnclosureObject, SlantSide } from '../types/cad';
 import {
@@ -18,6 +18,7 @@ import { FACE_LABEL, faceInfo, type Face } from '../subwoofer/faces';
 import { formatArea, formatVolume } from '../subwoofer/format';
 import { formatLength, round } from '../utils/units';
 import { NumberField, Section, TextField, ToolButton } from './controls';
+import { CutBlueprintDialog } from './CutBlueprintDialog';
 
 type Update = (
   fn: (o: EnclosureObject) => EnclosureObject,
@@ -601,6 +602,8 @@ function CutListSection({ o }: { o: EnclosureObject }) {
 }
 
 export function SubwooferPanel() {
+  const [blueprintOpen, setBlueprintOpen] = useState(false);
+  const closeBlueprint = useCallback(() => setBlueprintOpen(false), []);
   const selected = useSelectedObject();
   const firstBox = useCad((s) => s.objects.find((o): o is EnclosureObject => o.kind === 'enclosure') ?? null);
   const face = useCad((s) => s.selectedFace);
@@ -631,6 +634,7 @@ export function SubwooferPanel() {
           </button>
         )}
         <p className="text-[11px] text-muted">Click a side of the box to see its cut size and drag it to reshape the box.</p>
+        <ToolButton icon={Ruler} label="Cut Blueprint" onClick={() => setBlueprintOpen(true)} />
         <ToolButton
           icon={WandSparkles}
           label="Redesign box for me"
@@ -648,6 +652,7 @@ export function SubwooferPanel() {
           </ul>
         )}
       </Section>
+      {blueprintOpen && <CutBlueprintDialog box={box} onClose={closeBlueprint} />}
       {face && selected?.id === box.id && <SelectedPanelSection o={box} face={face} update={update} />}
       <ResultsSection o={box} />
       <DriverSection o={box} update={update} />
